@@ -1,0 +1,87 @@
+**HY463 - Phase A Report: Indexing Subsystem Implementation**
+**csd4845 - Dimitrios Asimakopoulos, csd4960 - Dimitrios Mpasakidis
+
+**Overview**
+The objective of Phase A was to build the indexing subsystem of an Information Retrieval (IR) system. This included the ability to tokenize documents, normalize terms (through case-folding and stemming), compute term frequency (TF), document frequency (DF), and create an efficient inverted index structure stored on disk. The system is enhanced with a graphical user interface and supports both Mitos and Snowball stemmers.
+
+
+
+First, we extract all unique words (terms) from the document collection, sort them lexicographically, and compute the document frequency (DF) for each term. We write this data to the `VocabularyFile.txt` file in the `CollectionIndex` folder.
+
+**Format:**
+```
+Term     Document Frequency   Pointer
+```
+The `Pointer` is a byte offset pointing to where this term's data starts in the `PostingFile.txt` file. This allows direct access via random access.
+
+
+
+
+Each document is assigned a unique ID and its metadata is stored in `DocumentsFile.txt`. The data includes:
+- Document ID
+- Full path
+- Document vector length (norm) used for similarity computation
+
+**Format:**
+```
+DocID    Path    Norm
+```
+
+
+
+
+
+Instead of separate files for each word, we store the inverted index in a single file, `PostingFile.txt`. Each entry contains:
+- Document ID
+- Term Frequency (TF)
+- Positions of the term in the document
+- Pointer to the document info in `DocumentsFile.txt`
+
+**Format:**
+```
+Term    DocID   TF   Positions   DocPointer
+```
+The term's starting byte in this file is used in `VocabularyFile.txt`.
+
+Random Access was implemented using `RandomAccessFile` to allow non-sequential access when querying terms.
+
+
+
+
+
+
+To manage memory efficiently, partial indexes are written to disk in sorted batches. After all documents are processed, these partial indexes are merged to produce the final `PostingFile.txt` and `VocabularyFile.txt`. Merging is done by reading and merging term-by-term, sorting postings, and updating pointer fields appropriately.
+
+
+
+**Stemming Support**
+
+1. **Mitos Stemmer:** Integrated through the imported JAR. Applied during normalization.
+2. **Snowball Stemmer:** Added for English stemming. User can configure the system to use either stemmer.
+
+
+
+
+**Indexing Constraints**
+
+- Only 4-digit numbers recognized as years are retained from numeric tokens.
+- Non-alphabetic characters are stripped.
+- Case-folding and stemming are applied to normalize tokens.
+
+
+
+
+**Graphical Interface - IndexerGUI**
+
+The system provides a Swing-based GUI (`IndexerGUI.java`) that allows users to:
+- Select the source documents folder
+- Select the index output directory
+- Start the indexing process
+- View statistics post-indexing (time taken, documents indexed)
+
+The GUI is launched with:
+```java
+javax.swing.SwingUtilities.invokeLater(() -> new IndexerGUI().createAndShowGUI());
+```
+
+
