@@ -1,0 +1,5 @@
+DocID FilePath Norm
+1 C:\Users\jimas\OneDrive\Desktop\csd\2025-3-EkfonisiPublic\2025-3-EkfonisiPublic\test\0\1852545.nxml 68.72408602520662
+2 C:\Users\jimas\OneDrive\Desktop\csd\2025-3-EkfonisiPublic\2025-3-EkfonisiPublic\test\0\1942180.nxml 31.54362059117501
+3 C:\Users\jimas\OneDrive\Desktop\csd\2025-3-EkfonisiPublic\2025-3-EkfonisiPublic\test\0\1994002.nxml 126.40015822774906
+4 C:\Users\jimas\OneDrive\Desktop\csd\2025-3-EkfonisiPublic\2025-3-EkfonisiPublic\test\0\2232040.nxml 1366.1226152875151
